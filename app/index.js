@@ -2,10 +2,14 @@ const express = require('express');
 const app = express();
 const rp = require('request-promise');
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     let buyboxes = null;
     try {
-        buyboxes = await rp(`http://${process.env.BUYBOX_SERVICE}`);
+        buyboxes = await rp({
+            method: 'GET',
+            uri: `http://${process.env.BUYBOX_SERVICE}`,
+            headers: req.headers
+          });
     } catch (e) {
         console.log(e);
     }
@@ -14,7 +18,7 @@ app.get('/', (req, res) => {
         id: 123,
         name: "MyRandomSeller",
         description: "SellerInfo",
-        buyboxes: buyboxes
+        buyboxes: JSON.parse(buyboxes)
     })
 });
 
