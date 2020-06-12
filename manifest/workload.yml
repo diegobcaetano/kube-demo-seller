@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-demo-seller
+  namespace: demo-service
+spec:
+  selector:
+    matchLabels:
+      app: kube-demo-seller
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: kube-demo-seller
+    spec:
+      containers:
+      - name: kube-demo-seller
+        image: 787278094283.dkr.ecr.us-east-2.amazonaws.com/ca-kube-demo-seller:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 3000
+          name: seller-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-demo-seller
+  namespace: demo-service
+spec:
+  ports:
+    - port: 80
+      targetPort: seller-port
+      protocol: TCP
+  selector:
+    app: kube-demo-seller
