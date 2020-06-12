@@ -16,6 +16,9 @@ spec:
       containers:
       - name: kube-demo-seller
         image: 787278094283.dkr.ecr.us-east-2.amazonaws.com/ca-kube-demo-seller:latest
+        env:
+          - name: BUYBOX_SERVICE
+            value: kube-demo-buybox.demo-service
         resources:
           limits:
             memory: "256Mi"
